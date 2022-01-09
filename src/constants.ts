@@ -1,4 +1,5 @@
-export const MNEMONIC = 'odor match funny accuse spatial copper purse milk quote wine salute three drip weasel fall'
+export const MNEMONIC_ODOR = 'odor match funny accuse spatial copper purse milk quote wine salute three drip weasel fall'
+export const MNEMONIC_PREVENT = 'prevent blanket banner coconut day credit just stereo purse soccer ignore garbage transfer phrase company'
 
 // `import FungibleToken from 0xFUNGIBLETOKENADDRESS
 // import FlowToken from 0xFLOWTOKENADDRESS

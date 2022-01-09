@@ -9,6 +9,7 @@ import { TESTNET_CONFIG } from "./constants";
 import { TestCode } from "./sdk/txs/testTx";
 import { SetupStakingCollectionCode } from "./sdk/txs/setupStakingCollection";
 import { GetDelegatorInfoCode } from "./sdk/txs/getDelegatorInfo";
+import { createAccount, getAccount } from "./api/flowport";
 
 fcl.config(TESTNET_CONFIG)
 
@@ -50,7 +51,18 @@ async function getStakingInfoTx() {
   console.log(await executeScript(GetDelegatorInfoCode, await getAuthFn(), args))
 }
 
+async function getOrCreateAccount() {
+  let account = await getAccount('f2b5b79b577ed202e9d1a81a8d918107d51871778ecb7c270d3d726a517deec9b585789b563dab3bd67401c161465bf38f29cbf50acef04c40e2a6607dc267ba')
+  if ('error' in account) {
+    console.log(account.error)
+    console.log('creating new account')
+    await createAccount('f2b5b79b577ed202e9d1a81a8d918107d51871778ecb7c270d3d726a517deec9b585789b563dab3bd67401c161465bf38f29cbf50acef04c40e2a6607dc267ba')
+  }
+  console.log(account)
+}
+
 // printAddress()
 // printAccountInfo()
 // testTx()
-getStakingInfoTx()
+// getStakingInfoTx()
+getOrCreateAccount()

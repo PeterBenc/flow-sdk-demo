@@ -1,6 +1,6 @@
 import { ec as EC} from "elliptic"
 import {SHA3} from "sha3"
-import { MNEMONIC } from "./constants";
+import {MNEMONIC_PREVENT } from "./constants";
 import { mnemonicToSeed } from "./mnemonic";
 const ec = new EC("p256")
 
@@ -24,7 +24,7 @@ export const getSignFn = (privKey: string): (signable: string) => Promise<string
 }
 
 export const getAccountKeyPair = async (accountIndex: number) => {
-  const seed = await mnemonicToSeed(MNEMONIC)
+  const seed = await mnemonicToSeed(MNEMONIC_PREVENT)
   // const rootKeyPair = ec.genKeyPair({entropy: seed})
   // const {privateKey, publicKey, chainCode, network} =  root.derivePath("m/44'/539'/0'")
   // TODO: derive the public key from seed
