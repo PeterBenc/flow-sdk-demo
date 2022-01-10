@@ -1,4 +1,4 @@
-export const SetupStakingCollectionCode = 
+export const setupStakingCollectionCode = 
 `import FungibleToken from 0xFUNGIBLETOKENADDRESS
 import FlowToken from 0xFLOWTOKENADDRESS
 import FlowIDTableStaking from 0xIDENTITYTABLEADDRESS

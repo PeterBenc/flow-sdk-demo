@@ -23,14 +23,10 @@ export const submitTx = async (tx: string, authFn: any, args: any[] = []) => {
   console.log(events)
 }
 
-export const executeScript = async (script: string, authFn: any, args: any[] = []) => {
+export const executeScript = async (script: string, args: any[] = []) => {
   const res = await fcl.send([
     fcl.script`${script}`,
     fcl.args(args),
-    fcl.proposer(authFn),
-    fcl.payer(authFn),
-    fcl.authorizations([ authFn ]),
-    fcl.limit(5000),
   ])
   return fcl.decode(res)
 }
