@@ -5,7 +5,7 @@ import { executeScript, getAccountInfo, submitTx} from "./api/accessNode";
 import fcl from "@onflow/fcl"
 // @ts-ignore
 import * as t from '@onflow/types'
-import { TESTNET_CONFIG } from "./constants";
+import { MAINNET_CONFIG, TESTNET_CONFIG } from "./constants";
 import { NodeIdList } from "./api/accessNode/types";
 import { getNodeIdsCode } from "./sdk/txs/getNodeIds";
 import { createAccount, getAccount } from "./api/flowport";
@@ -80,7 +80,7 @@ async function delegateTx() {
 // printAddress()
 // printAccountInfo()
 // testTx()
-getStakingInfoTx()
+// getStakingInfoTx()
 // getOrCreateAccount()
-// getNodeIds()
+getNodeIds()
 // delegateTx()
