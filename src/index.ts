@@ -21,19 +21,19 @@ const accountIndex = 0
 
 async function printAddress() {
   const keyPair = await getAccountKeyPair(accountIndex)
-  console.log(getAccountAddress(keyPair.pubKeyHex))
+  console.log(await getAccountAddress(keyPair.pubKeyHex))
 }
 
 async function printAccountInfo() {
   const keyPair = await getAccountKeyPair(accountIndex)
-  const address = getAccountAddress(keyPair.pubKeyHex)
+  const address = await getAccountAddress(keyPair.pubKeyHex)
   console.log(await getAccountInfo(address))
 }
 
 const getAuthFn = async () => {
   const keyPair = await getAccountKeyPair(accountIndex)
   const signFn = getSignFn(keyPair.privKeyHex)
-  const address = getAccountAddress(keyPair.pubKeyHex)
+  const address = await getAccountAddress(keyPair.pubKeyHex)
   const {keys} = await getAccountInfo(address)
   return await authz(address, keys[accountIndex].index.toString(), signFn)
 }
@@ -47,22 +47,12 @@ async function setupStakingCollectionTx() {
   submitTx(setupStakingCollectionCode, await getAuthFn())
 }
 
-async function getStakingInfoTx() {
+async function getStakingInfo() {
   const keyPair = await getAccountKeyPair(accountIndex)
-  const address = getAccountAddress(keyPair.pubKeyHex)
+  const address = await getAccountAddress(keyPair.pubKeyHex)
   const args = [fcl.arg(address, t.Address)]
   const stakingInfo = await executeScript(getDelegatorInfoCode, args)
   console.log(stakingInfo)
-}
-
-async function getOrCreateAccount() {
-  let account = await getAccount('f2b5b79b577ed202e9d1a81a8d918107d51871778ecb7c270d3d726a517deec9b585789b563dab3bd67401c161465bf38f29cbf50acef04c40e2a6607dc267ba')
-  if ('error' in account) {
-    console.log(account.error)
-    console.log('creating new account')
-    await createAccount('f2b5b79b577ed202e9d1a81a8d918107d51871778ecb7c270d3d726a517deec9b585789b563dab3bd67401c161465bf38f29cbf50acef04c40e2a6607dc267ba')
-  }
-  console.log(account)
 }
 
 async function getNodeIds() {
@@ -77,10 +67,11 @@ async function delegateTx() {
   submitTx(delegateCode, await getAuthFn(), args)
 }
 
-// printAddress()
+printAddress()
 // printAccountInfo()
 // testTx()
-// getStakingInfoTx()
-// getOrCreateAccount()
-getNodeIds()
 // delegateTx()
+setupStakingCollectionTx()
+// getStakingInfo()
+// getNodeIds()
+

@@ -1,5 +1,7 @@
 import { ec as EC} from "elliptic"
 import {SHA3} from "sha3"
+import { getAccountInfo } from "./api/accessNode";
+import { createAccount, getAccount } from "./api/flowport";
 import {MNEMONIC_PREVENT } from "./constants";
 import { mnemonicToSeed } from "./mnemonic";
 const ec = new EC("p256")
@@ -13,7 +15,6 @@ const hashMsgHex = (msgHex: string) => {
 // https://github.dev/MaxStalker/flow-multipart-sign-process/tree/main/frontend/src
 export const getSignFn = (privKey: string): (signable: string) => Promise<string> => {
   return (signable: string) => {
-    // console.log({ privKey, signable });
     const key = ec.keyFromPrivate(Buffer.from(privKey, "hex"))
     const sig = key.sign(hashMsgHex(signable))
     const n = 32; // half of signature length?
@@ -23,17 +24,34 @@ export const getSignFn = (privKey: string): (signable: string) => Promise<string
   }
 }
 
-export const getAccountKeyPair = async (accountIndex: number) => {
-  const seed = await mnemonicToSeed(MNEMONIC_PREVENT)
-  // const rootKeyPair = ec.genKeyPair({entropy: seed})
-  // const {privateKey, publicKey, chainCode, network} =  root.derivePath("m/44'/539'/0'")
-  // TODO: derive the public key from seed
+// TODO: this is just temporary impl
+const seedToRootKeyPair = (seed: string) => {
+  const privHex = hashMsgHex(seed).toString('hex') // just to cut it to 64 bytes
+  const privKey = ec.keyFromPrivate(Buffer.from(privHex, "hex"))
+  const pubKey = privKey.getPublic()
   return {
-    privKeyHex: 'bfba4182bbfa8fcbbe5a65d01061f0792a3d36de6db2f307396e9f7c07e4845c',
-    pubKeyHex: 'ae59227297f225a03730e10c53d88212523006f14963dd01ab401b1f7c4a571d7fbcb45bb5d69723beba0451ae5f625321da49dc4d4b088b35d65da3200aa2ea',
+    privKeyHex: privHex,
+    pubKeyHex: pubKey.encode('hex', false).slice(2),
   }
 }
 
-export const getAccountAddress = (publicKey: string) => {
-  return '0xfabf8975b228146d' // TODO: get from flowport api
+export const getAccountKeyPair = async (accountIndex: number) => {
+  const seed = await mnemonicToSeed(MNEMONIC_PREVENT)
+  // since we dont know how the implement the derivation, we use just this for all accounts
+  return seedToRootKeyPair(seed)
+}
+
+export const getAccountAddress = async (publicKey: string) => {
+  let account = await getAccount(publicKey)
+  if ('error' in account) {
+    console.log(account.error)
+    console.log('creating new account')
+    account = (await createAccount(publicKey))
+    console.log('created')
+  }
+
+  if ('address' in account) {
+    return `0x${account.address}`
+  }
+  throw Error('Fail')
 }

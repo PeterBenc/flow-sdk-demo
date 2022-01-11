@@ -2,7 +2,7 @@ export const MNEMONIC_ODOR = 'odor match funny accuse spatial copper purse milk 
 export const MNEMONIC_PREVENT = 'prevent blanket banner coconut day credit just stereo purse soccer ignore garbage transfer phrase company'
 
 export const TESTNET_CONFIG = {
-  'accessNode.api': "http://access.devnet.flow-nodes.nu.fi:8000",
+  'accessNode.api': "https://access-testnet.onflow.org",
   // 'challenge.handshake': "https://flow-wallet-testnet.blocto.app/authn",
   '0xFUNGIBLETOKENADDRESS': '0x9a0766d93b6608b7',
   '0xFLOWTOKENADDRESS': '0x7e60df042a9c0868',
